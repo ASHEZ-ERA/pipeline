@@ -18,8 +18,10 @@ pipeline {
               }
             }
         stage('Test'){
-                echo 'Running tests...' //print a message to indicate the testing process
-                sh 'echo tests passed!' //simulate testing process
+                steps {
+                    echo 'Running tests...' //print a message to indicate the testing process
+                    sh 'echo all tests passed!' //simulate testing process
+                }
             }
         stage('Build Docker Image'){
                 steps {
