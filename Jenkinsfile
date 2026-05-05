@@ -28,13 +28,17 @@ pipeline {
                     echo 'Building Docker image...' //print a message to indicate the building process
                     sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ." //build the docker image with a tag that includes the build number that is automatically incremented by jenkins"
                 }}
-        stage('Push to Docker Hub'){
-                    steps{
-                        sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin" //login to dockerhub using the credentials stored in jenkins
-                        sh "docker push ${IMAGE_NAME}:${BUILD_NUMBER}" //push the docker image to dockerhub
-
-                    }
-                    }
+        stage('Push to Docker Hub') {
+                 steps {
+                     echo 'Pushing to Docker Hub...'
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
+                         usernameVariable: 'DOCKER_USER',
+                         passwordVariable: 'DOCKER_PASS')]) {
+                      sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                      sh "docker push ${IMAGE_NAME}:${BUILD_NUMBER}"
+        }
+    }
+}   
         stage('Deploy'){
                     steps {
                         sh "docker stop jenkins-pipeline || true" //stop the running container if it exists, ignore errors if it doesn't exist
