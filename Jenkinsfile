@@ -2,7 +2,7 @@ pipeline {
     agent any //run this on whatever jenkins server is available
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds') //credentials for dockerhub already stored in jenkins
-        IMAGE_NAME = 'ashezzz/jenkins-pipeline' //name of the image to be built and pushed to dockerhub
+        IMAGE_NAME = 'Ashezzz/jenkins-pipeline' //name of the image to be built and pushed to dockerhub
     }
     stages {
         stage('Clone'){
